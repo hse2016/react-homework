@@ -23,7 +23,7 @@
     "eslint-plugin-react": "^6.8.0",
     "react": "~15.4.1",
     "webpack": "~1.14.0"
-  }
+  },
   "engines": {
     "node": "7.2.x",
     "nvm": "7.2.x"
