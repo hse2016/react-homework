@@ -59,12 +59,7 @@ var result =
 	  var root = document.querySelector('.mainlist');
 	
 	  // create models
-	  var mainList = [{
-	    todos: [{
-	      title: 'asdf',
-	      completed: false
-	    }]
-	  }, { todos: [] }];
+	  var mainList = [{ todos: [] }];
 	
 	  ReactDOM.render(React.createElement(MainList, { data: mainList }), root);
 	})();

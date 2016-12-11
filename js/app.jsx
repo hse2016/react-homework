@@ -10,12 +10,6 @@ let MainList = components.MainList;
 
   // create models
   let mainList = [
-    {
-      todos : [ {
-        title : 'asdf',
-        completed : false
-      }]
-    },
     {todos : []},
   ];
 
