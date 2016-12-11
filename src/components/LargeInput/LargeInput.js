@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+require("./LargeInput.css");
 
 export default class LargeInput extends Component {
 
@@ -10,7 +11,7 @@ export default class LargeInput extends Component {
 
     render() {
         return (
-            <input value={this.props.inputText} onChange={this.props.onTextChange} onKeyDown={this.AddTodoKeyPress.bind(this)}/>
+            <input className="new-todo" value={this.props.inputText} onChange={this.props.onTextChange} onKeyDown={this.AddTodoKeyPress.bind(this)}/>
         );
     }
 }

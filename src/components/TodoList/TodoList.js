@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
+import Todo from './../Todo/Todo'
+require("./TodoList.css");
 
 export default class TodoList extends Component {
     render() {
         return (
-            <div>
+            <section className="main">
 
-                {this.props.items.map(item => (
-                    <Todo id={item.id} />
-                ))}
+                <input className="toggle-all" type="checkbox" />
 
-            </div>
+                <div className="todo-list">
+                    {this.props.todos.map(item => (
+                        <Todo title={item.title} id={item.id} toggleTodo={this.props.toggleTodo} />
+                    ))}
+                </div>
+
+            </section>
         );
     }
 }
