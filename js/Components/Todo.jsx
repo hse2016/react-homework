@@ -13,7 +13,7 @@ class Todo extends React.Component {
     let data = this.props.data;
     data.completed = !data.completed;
     this.setState({data: data});
-    this.props.handlers.calculateCompleted();
+    this.props.handlers.calculateTodos();
   }
 
   startEdit() {
@@ -45,7 +45,10 @@ class Todo extends React.Component {
           <label onDoubleClick={this.startEdit.bind(this)}>
             {data.title}
           </label>
-          <button className="destroy"></button>
+          <button
+             className="destroy"
+             onClick={this.props.handlers.removeTodo}>
+          </button>
         </div>
         <input
            className="edit"

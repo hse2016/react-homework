@@ -10,14 +10,26 @@ class MainList extends React.Component {
     this.setState({data: this.props.data});
   }
 
+  removeTodoList(key) {
+    this.props.data.splice(key, 1);
+    this.setState({
+      data: this.props.data
+    });
+  }
+
   render() {
     let mainList, data=this.props.data,
         show = data.show;
 
     if (data.length > 0) {
-      mainList = data.map(function(item, index) {
+      mainList = data.map((item, index) => {
         return (
-          <TodoList key={index} data={item}/>
+          <TodoList
+             key={index}
+             data={item}
+             handlers={{
+               removeTodoList: this.removeTodoList.bind(this, index)
+             }}/>
         );
       });
     } else {

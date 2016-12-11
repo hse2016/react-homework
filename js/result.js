@@ -21726,46 +21726,75 @@ var result =
 	    var _this = (0, _possibleConstructorReturn3.default)(this, (TodoList.__proto__ || (0, _getPrototypeOf2.default)(TodoList)).call(this, props));
 	
 	    _this.state = {
-	      show: 'All',
-	      completedNumber: 0
+	      show: 'All'
 	    };
 	    return _this;
 	  }
 	
 	  (0, _createClass3.default)(TodoList, [{
+	    key: "addTodo",
+	    value: function addTodo(event) {
+	      if (event.type === 'keypress' && event.key !== 'Enter') return;
+	
+	      var title = event.target.value;
+	      this.props.data.todos.push({ title: title, completed: false });
+	      this.setState({ data: this.props.data });
+	      event.target.value = "";
+	    }
+	  }, {
+	    key: "removeTodo",
+	    value: function removeTodo(key) {
+	      this.props.data.todos.splice(key, 1);
+	      this.setState({
+	        data: this.props.data
+	      });
+	    }
+	  }, {
+	    key: "clearCompleted",
+	    value: function clearCompleted() {
+	      var active = [],
+	          todos = this.props.data.todos;
+	      for (var i = 0, size = todos.length; i < size; ++i) {
+	        if (!todos[i].completed) active.push(todos[i]);
+	      }
+	
+	      this.props.data.todos = active;
+	
+	      this.setState({
+	        data: this.props.data });
+	    }
+	  }, {
 	    key: "changeShow",
 	    value: function changeShow(show, e) {
 	      e.preventDefault();
 	      this.setState({ show: show });
 	    }
 	  }, {
-	    key: "calculateCompleted",
-	    value: function calculateCompleted() {
-	      var todos = this.props.data.todos,
-	          completedNumber = 0,
-	          allCompleted = true;
+	    key: "calculateTodos",
+	    value: function calculateTodos() {
+	      this.forceUpdate();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var data = this.props.data,
+	          show = this.state.show,
+	          todos = data.todos,
+	          todosNumber = todos.length,
+	          completedNumber = 0;
+	
+	      var todoTemplates = void 0,
+	          calculateTodos = this.calculateTodos.bind(this);
+	
 	      for (var i = 0, size = todos.length; i < size; ++i) {
 	        if (todos[i].completed) {
 	          ++completedNumber;
 	        }
 	      }
 	
-	      this.setState({ completedNumber: completedNumber });
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var data = this.props.data,
-	          show = this.state.show,
-	          todos = data.todos,
-	          todosNumber = todos.length,
-	          completedNumber = this.state.completedNumber;
 	      var allCompleted = todosNumber === completedNumber;
-	
-	      var todoTemplates = void 0;
-	      var todoListHandlers = {
-	        calculateCompleted: this.calculateCompleted.bind(this)
-	      };
 	
 	      if (todosNumber > 0) {
 	        todoTemplates = todos.map(function (item, index) {
@@ -21773,17 +21802,72 @@ var result =
 	            return React.createElement(Todo, {
 	              key: index,
 	              data: item,
-	              handlers: todoListHandlers });
+	              handlers: {
+	                calculateTodos: calculateTodos,
+	                removeTodo: _this2.removeTodo.bind(_this2, index)
+	              } });
 	          }
 	          return "";
 	        });
 	      } else {
-	        todoTemplates = React.createElement(
-	          "p",
-	          null,
-	          "No todo lists"
-	        );
+	        todoTemplates = "";
 	      }
+	
+	      var footer = React.createElement(
+	        "footer",
+	        { className: "footer" },
+	        React.createElement(
+	          "span",
+	          { className: "todo-count" },
+	          React.createElement(
+	            "strong",
+	            null,
+	            todosNumber - completedNumber
+	          ),
+	          " item left"
+	        ),
+	        React.createElement(
+	          "ul",
+	          { className: "filters" },
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { className: (show === 'All' ? 'selected' : '') + ' btn',
+	                onClick: this.changeShow.bind(this, 'All') },
+	              "All"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { className: (show === 'Active' ? 'selected' : '') + ' btn',
+	                onClick: this.changeShow.bind(this, 'Active') },
+	              "Active"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { className: (show === 'Completed' ? 'selected' : '') + ' btn',
+	                onClick: this.changeShow.bind(this, 'Completed') },
+	              "Completed"
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          "button",
+	          {
+	            className: "clear-completed",
+	            onClick: this.clearCompleted.bind(this) },
+	          "Clear completed"
+	        )
+	      );
 	
 	      return React.createElement(
 	        "div",
@@ -21791,10 +21875,15 @@ var result =
 	        React.createElement(
 	          "header",
 	          { className: "header" },
-	          React.createElement("input", { className: "new-todo", placeholder: "What needs to be done?", autoFocus: true }),
+	          React.createElement("input", {
+	            className: "new-todo",
+	            placeholder: "What needs to be done?",
+	            onKeyPress: this.addTodo.bind(this) }),
 	          React.createElement(
 	            "button",
-	            { className: "destroy-todolist" },
+	            {
+	              className: "destroy-todolist",
+	              onClick: this.props.handlers.removeTodoList },
 	            "X"
 	          )
 	        ),
@@ -21804,7 +21893,9 @@ var result =
 	          React.createElement("input", {
 	            className: "toggle-all",
 	            type: "checkbox",
-	            checked: allCompleted }),
+	            checked: allCompleted,
+	            onChange: function onChange() {} }),
+	          " ",
 	          React.createElement(
 	            "label",
 	            { htmlFor: "toggle-all" },
@@ -21816,59 +21907,7 @@ var result =
 	            todoTemplates
 	          )
 	        ),
-	        React.createElement(
-	          "footer",
-	          { className: "footer" },
-	          React.createElement(
-	            "span",
-	            { className: "todo-count" },
-	            React.createElement(
-	              "strong",
-	              null,
-	              completedNumber
-	            ),
-	            " item left"
-	          ),
-	          React.createElement(
-	            "ul",
-	            { className: "filters" },
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { className: (show === 'All' ? 'selected' : '') + ' btn',
-	                  onClick: this.changeShow.bind(this, 'All') },
-	                "All"
-	              )
-	            ),
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { className: (show === 'Active' ? 'selected' : '') + ' btn',
-	                  onClick: this.changeShow.bind(this, 'Active') },
-	                "Active"
-	              )
-	            ),
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { className: (show === 'Completed' ? 'selected' : '') + ' btn',
-	                  onClick: this.changeShow.bind(this, 'Completed') },
-	                "Completed"
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            "button",
-	            { className: "clear-completed" },
-	            "Clear completed"
-	          )
-	        )
+	        todoTemplates ? footer : ""
 	      );
 	    }
 	  }]);
@@ -23457,7 +23496,7 @@ var result =
 	      var data = this.props.data;
 	      data.completed = !data.completed;
 	      this.setState({ data: data });
-	      this.props.handlers.calculateCompleted();
+	      this.props.handlers.calculateTodos();
 	    }
 	  }, {
 	    key: 'startEdit',
@@ -23497,7 +23536,9 @@ var result =
 	            { onDoubleClick: this.startEdit.bind(this) },
 	            data.title
 	          ),
-	          React.createElement('button', { className: 'destroy' })
+	          React.createElement('button', {
+	            className: 'destroy',
+	            onClick: this.props.handlers.removeTodo })
 	        ),
 	        React.createElement('input', {
 	          className: 'edit',
@@ -23560,15 +23601,30 @@ var result =
 	      this.setState({ data: this.props.data });
 	    }
 	  }, {
+	    key: 'removeTodoList',
+	    value: function removeTodoList(key) {
+	      this.props.data.splice(key, 1);
+	      this.setState({
+	        data: this.props.data
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
 	      var mainList = void 0,
 	          data = this.props.data,
 	          show = data.show;
 	
 	      if (data.length > 0) {
 	        mainList = data.map(function (item, index) {
-	          return React.createElement(TodoList, { key: index, data: item });
+	          return React.createElement(TodoList, {
+	            key: index,
+	            data: item,
+	            handlers: {
+	              removeTodoList: _this2.removeTodoList.bind(_this2, index)
+	            } });
 	        });
 	      } else {
 	        mainList = React.createElement(
