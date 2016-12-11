@@ -3,28 +3,58 @@ let React = require("react");
 class Todo extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      completed: false,
+      editing: false
     };
-    console.log(props);
+  }
+
+  toggleCompleted() {
+    let data = this.props.data;
+    data.completed = !data.completed;
+    this.setState({data: data});
+    this.props.handlers.calculateCompleted();
+  }
+
+  startEdit() {
+    this.setState({editing: true});
+  }
+
+  finishEdit(event) {
+    if (event.type === 'keypress' && event.key !== 'Enter') return;
+
+    let title = event.target.value;
+    let data = this.props.data;
+    data.title = title;
+    this.setState({editing: false, data: data});
   }
 
   render() {
+    let editing = this.state.editing;
     let data = this.props.data;
 
-    let completed = this.state.completed;
+    let completed = data.completed;
 
     return (
-      <li>
+      <li className={editing ? "editing" : ""}>
         <div className="view">
-          <input className="toggle" type="checkbox" checked={completed ? "checked" : ""} />
-            <label>{data.title}</label>
-            <button className="destroy"></button>
+          <input className="toggle"
+                 type="checkbox"
+                 checked={completed ? "checked" : ""}
+                 onChange={this.toggleCompleted.bind(this)}/>
+          <label onDoubleClick={this.startEdit.bind(this)}>
+            {data.title}
+          </label>
+          <button className="destroy"></button>
         </div>
-        <input className="edit" value={data.title} />
+        <input
+           className="edit"
+           defaultValue={data.title}
+           onKeyPress={this.finishEdit.bind(this)}
+           onBlur={this.finishEdit.bind(this)}/>
       </li>
     );
   }
 }
 
-module.exports = {Todo : Todo}
+module.exports = {Todo : Todo};

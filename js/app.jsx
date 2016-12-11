@@ -3,7 +3,6 @@ var ReactDOM = require('react-dom');
 var components = require('Components');
 let MainList = components.MainList;
 
-
 (function() {
   "use strict";
   // find elements
@@ -12,15 +11,14 @@ let MainList = components.MainList;
   // create models
   let mainList = [
     {
-      todos: [{title: 'asdf'}]
-    }, {
-      todos: []
+      todos : [ {
+        title : 'asdf',
+        completed : false
+      }]
     },
+    {todos : []},
   ];
 
-  ReactDOM.render(
-    <MainList data={mainList}/>,
-    root
-  );
+  ReactDOM.render(<MainList data = {mainList} />, root);
 
 })();

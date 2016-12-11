@@ -6,6 +6,7 @@ class TodoList extends React.Component {
     super(props);
     this.state = {
       show: 'All',
+      completedNumber: 0
     };
   }
 
@@ -14,23 +15,49 @@ class TodoList extends React.Component {
     this.setState({show: show});
   }
 
+  calculateCompleted() {
+    let todos = this.props.data.todos,
+        completedNumber = 0,
+        allCompleted = true;
+    for (let i = 0, size = todos.length; i < size; ++i) {
+      if (todos[i].completed) {
+        ++completedNumber;
+      }
+    }
+
+    this.setState({completedNumber: completedNumber});
+  }
+
   render() {
     let data = this.props.data,
         show = this.state.show,
-        todos = data.todos;
+        todos = data.todos,
+        todosNumber = todos.length,
+        completedNumber = this.state.completedNumber;
+    let allCompleted = (todosNumber === completedNumber);
 
     let todoTemplates;
+    let todoListHandlers = {
+      calculateCompleted: this.calculateCompleted.bind(this)
+    };
 
-    if (todos.length > 0) {
+    if (todosNumber > 0) {
       todoTemplates = todos.map(function(item, index) {
-        return (
-          <Todo key={index} data={item}/>
-        )
-      })
+        if (show == 'All' ||
+            (item.completed && show == "Completed") ||
+            (!item.completed && show == "Active")) {
+          return (
+            <Todo
+               key={index}
+               data={item}
+               handlers={todoListHandlers}/>
+          );
+        }
+        return "";
+      });
     } else {
-      todoTemplates = <p>No todo lists</p>
+      todoTemplates = <p>No todo lists</p>;
     }
-
 
     return (
       <div className="todoapp todolist">
@@ -39,14 +66,17 @@ class TodoList extends React.Component {
           <button className="destroy-todolist">X</button>
         </header>
         <section className="main">
-          <input className="toggle-all" type="checkbox" />
+          <input
+             className="toggle-all"
+             type="checkbox"
+             checked={allCompleted}/>
           <label htmlFor="toggle-all">Mark all as complete</label>
           <ul className="todo-list">
             {todoTemplates}
           </ul>
         </section>
         <footer className="footer">
-          <span className="todo-count"><strong>0</strong> item left</span>
+          <span className="todo-count"><strong>{completedNumber}</strong> item left</span>
           <ul className="filters">
             <li>
               <a className={(show === 'All' ? 'selected': '') + ' btn'}

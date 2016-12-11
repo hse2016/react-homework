@@ -60,10 +60,11 @@ var result =
 	
 	  // create models
 	  var mainList = [{
-	    todos: [{ title: 'asdf' }]
-	  }, {
-	    todos: []
-	  }];
+	    todos: [{
+	      title: 'asdf',
+	      completed: false
+	    }]
+	  }, { todos: [] }];
 	
 	  ReactDOM.render(React.createElement(MainList, { data: mainList }), root);
 	})();
@@ -21725,7 +21726,8 @@ var result =
 	    var _this = (0, _possibleConstructorReturn3.default)(this, (TodoList.__proto__ || (0, _getPrototypeOf2.default)(TodoList)).call(this, props));
 	
 	    _this.state = {
-	      show: 'All'
+	      show: 'All',
+	      completedNumber: 0
 	    };
 	    return _this;
 	  }
@@ -21737,17 +21739,43 @@ var result =
 	      this.setState({ show: show });
 	    }
 	  }, {
+	    key: "calculateCompleted",
+	    value: function calculateCompleted() {
+	      var todos = this.props.data.todos,
+	          completedNumber = 0,
+	          allCompleted = true;
+	      for (var i = 0, size = todos.length; i < size; ++i) {
+	        if (todos[i].completed) {
+	          ++completedNumber;
+	        }
+	      }
+	
+	      this.setState({ completedNumber: completedNumber });
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      var data = this.props.data,
 	          show = this.state.show,
-	          todos = data.todos;
+	          todos = data.todos,
+	          todosNumber = todos.length,
+	          completedNumber = this.state.completedNumber;
+	      var allCompleted = todosNumber === completedNumber;
 	
 	      var todoTemplates = void 0;
+	      var todoListHandlers = {
+	        calculateCompleted: this.calculateCompleted.bind(this)
+	      };
 	
-	      if (todos.length > 0) {
+	      if (todosNumber > 0) {
 	        todoTemplates = todos.map(function (item, index) {
-	          return React.createElement(Todo, { key: index, data: item });
+	          if (show == 'All' || item.completed && show == "Completed" || !item.completed && show == "Active") {
+	            return React.createElement(Todo, {
+	              key: index,
+	              data: item,
+	              handlers: todoListHandlers });
+	          }
+	          return "";
 	        });
 	      } else {
 	        todoTemplates = React.createElement(
@@ -21773,7 +21801,10 @@ var result =
 	        React.createElement(
 	          "section",
 	          { className: "main" },
-	          React.createElement("input", { className: "toggle-all", type: "checkbox" }),
+	          React.createElement("input", {
+	            className: "toggle-all",
+	            type: "checkbox",
+	            checked: allCompleted }),
 	          React.createElement(
 	            "label",
 	            { htmlFor: "toggle-all" },
@@ -21794,7 +21825,7 @@ var result =
 	            React.createElement(
 	              "strong",
 	              null,
-	              "0"
+	              completedNumber
 	            ),
 	            " item left"
 	          ),
@@ -23380,7 +23411,7 @@ var result =
 /* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var _getPrototypeOf = __webpack_require__(184);
 	
@@ -23415,34 +23446,64 @@ var result =
 	    var _this = (0, _possibleConstructorReturn3.default)(this, (Todo.__proto__ || (0, _getPrototypeOf2.default)(Todo)).call(this, props));
 	
 	    _this.state = {
-	      completed: false
+	      editing: false
 	    };
-	    console.log(props);
 	    return _this;
 	  }
 	
 	  (0, _createClass3.default)(Todo, [{
-	    key: "render",
+	    key: 'toggleCompleted',
+	    value: function toggleCompleted() {
+	      var data = this.props.data;
+	      data.completed = !data.completed;
+	      this.setState({ data: data });
+	      this.props.handlers.calculateCompleted();
+	    }
+	  }, {
+	    key: 'startEdit',
+	    value: function startEdit() {
+	      this.setState({ editing: true });
+	    }
+	  }, {
+	    key: 'finishEdit',
+	    value: function finishEdit(event) {
+	      if (event.type === 'keypress' && event.key !== 'Enter') return;
+	
+	      var title = event.target.value;
+	      var data = this.props.data;
+	      data.title = title;
+	      this.setState({ editing: false, data: data });
+	    }
+	  }, {
+	    key: 'render',
 	    value: function render() {
+	      var editing = this.state.editing;
 	      var data = this.props.data;
 	
-	      var completed = this.state.completed;
+	      var completed = data.completed;
 	
 	      return React.createElement(
-	        "li",
-	        null,
+	        'li',
+	        { className: editing ? "editing" : "" },
 	        React.createElement(
-	          "div",
-	          { className: "view" },
-	          React.createElement("input", { className: "toggle", type: "checkbox", checked: completed ? "checked" : "" }),
+	          'div',
+	          { className: 'view' },
+	          React.createElement('input', { className: 'toggle',
+	            type: 'checkbox',
+	            checked: completed ? "checked" : "",
+	            onChange: this.toggleCompleted.bind(this) }),
 	          React.createElement(
-	            "label",
-	            null,
+	            'label',
+	            { onDoubleClick: this.startEdit.bind(this) },
 	            data.title
 	          ),
-	          React.createElement("button", { className: "destroy" })
+	          React.createElement('button', { className: 'destroy' })
 	        ),
-	        React.createElement("input", { className: "edit", value: data.title })
+	        React.createElement('input', {
+	          className: 'edit',
+	          defaultValue: data.title,
+	          onKeyPress: this.finishEdit.bind(this),
+	          onBlur: this.finishEdit.bind(this) })
 	      );
 	    }
 	  }]);
@@ -23493,10 +23554,17 @@ var result =
 	  }
 	
 	  (0, _createClass3.default)(MainList, [{
+	    key: 'addTodoList',
+	    value: function addTodoList() {
+	      this.props.data.push({ todos: [], completed: false });
+	      this.setState({ data: this.props.data });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var mainList = void 0,
-	          data = this.props.data;
+	          data = this.props.data,
+	          show = data.show;
 	
 	      if (data.length > 0) {
 	        mainList = data.map(function (item, index) {
@@ -23523,7 +23591,9 @@ var result =
 	          null,
 	          React.createElement(
 	            'button',
-	            { className: 'add' },
+	            {
+	              className: 'add',
+	              onClick: this.addTodoList.bind(this) },
 	            '+'
 	          )
 	        )
