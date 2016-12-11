@@ -1,0 +1,43 @@
+{
+  "name": "react-homework",
+  "version": "1.0.0",
+  "description": "Реализовать todomvc из прошлого домашнего задания на чистом React",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "todomvc-app-css": "^2.0.6",
+    "todomvc-common": "^1.0.3",
+    "webpack": "^1.14.0",
+    "babel-core": "^6.20.0",
+    "babel-loader": "^6.2.9",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "jsx-loader": "^0.13.2",
+    "react-hot-loader": "^1.3.1",
+    "style-loader": "^0.13.1"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^1.16.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --history-api-fallback",
+    "postinstall": "webpack --config ./webpack-prod.config.js --progress --colors",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artmaks/react-homework.git"
+  },
+  "author": "artem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artmaks/react-homework/issues"
+  },
+  "homepage": "https://github.com/artmaks/react-homework#readme"
+}
