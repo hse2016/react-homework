@@ -24,6 +24,7 @@ export default class Todo extends Component {
         this.onDeleteItem = this.onDeleteItem.bind(this);
         this.onToggleAll = this.onToggleAll.bind(this);
         this.setFilter = this.setFilter.bind(this);
+        this.clearCompleted = this.clearCompleted.bind(this);
     }
 
     onTextChange(event) {
@@ -62,7 +63,6 @@ export default class Todo extends Component {
         });
         this.setState({
             todos: [].concat(updatedItems),
-            toggledAll: this.checkToggleAll()
         }, this.checkToggles);
     }
 
@@ -73,7 +73,6 @@ export default class Todo extends Component {
         });
         this.setState({
             todos: [].concat(updatedItems),
-            toggledAll: !this.state.toggledAll
         }, this.checkToggles);
     }
 
@@ -102,6 +101,15 @@ export default class Todo extends Component {
         }
     }
 
+    clearCompleted() {
+        var updatedItems = this.state.todos.filter(todo => {
+            return todo.completed !== true;
+        });
+        this.setState({
+            todos: [].concat(updatedItems),
+        }, this.checkToggles);
+    }
+
     render() {
         return (
             <section className="todoapp">
@@ -117,7 +125,8 @@ export default class Todo extends Component {
 
                 <Footer itemsLeft={this.state.itemsLeft}
                         filter={this.state.filter}
-                        setFilter={this.setFilter} />
+                        setFilter={this.setFilter}
+                        clearCompleted={this.clearCompleted}/>
             </section>
         );
     }

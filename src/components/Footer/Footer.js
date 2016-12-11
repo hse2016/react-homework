@@ -31,7 +31,7 @@ export default class Footer extends Component {
                         <a onClick={this.showCompleted.bind(this)} className={this.props.filter === 'completed' ? "selected" : ''} href="#">Completed</a>
                     </li>
                 </ul>
-                <button className="clear-completed">Clear completed</button>
+                <button className="clear-completed" onClick={this.props.clearCompleted}>Clear completed</button>
             </footer>
 
         );
