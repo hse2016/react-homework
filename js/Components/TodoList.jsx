@@ -1,4 +1,5 @@
 let React = require("react");
+let Todo = require("./Todo").Todo;
 
 class TodoList extends React.Component {
   constructor(props) {
@@ -15,7 +16,22 @@ class TodoList extends React.Component {
 
   render() {
     let data = this.props.data,
-        show = this.state.show;
+        show = this.state.show,
+        todos = data.todos;
+
+    let todoTemplates;
+
+    if (todos.length > 0) {
+      todoTemplates = todos.map(function(item, index) {
+        return (
+          <Todo key={index} data={item}/>
+        )
+      })
+    } else {
+      todoTemplates = <p>No todo lists</p>
+    }
+
+
     return (
       <div className="todoapp todolist">
         <header className="header">
@@ -26,29 +42,29 @@ class TodoList extends React.Component {
           <input className="toggle-all" type="checkbox" />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <ul className="todo-list">
-            render todo here
+            {todoTemplates}
           </ul>
         </section>
         <footer className="footer">
           <span className="todo-count"><strong>0</strong> item left</span>
           <ul className="filters">
             <li>
-              <a
-                 className={(show === 'All' ? 'selected': '') + ' btn'}
-                 onClick={this.changeShow.bind(this, 'All')}
-                 >All</a>
+              <a className={(show === 'All' ? 'selected': '') + ' btn'}
+                 onClick={this.changeShow.bind(this, 'All')}>
+                All
+              </a>
             </li>
             <li>
-              <a
-                 className={(show === 'Active' ? 'selected': '') + ' btn'}
-                 onClick={this.changeShow.bind(this, 'Active')}
-                 >Active</a>
+              <a className={(show === 'Active' ? 'selected': '') + ' btn'}
+                 onClick={this.changeShow.bind(this, 'Active')}>
+                Active
+              </a>
             </li>
             <li>
-              <a
-                 className={(show === 'Completed' ? 'selected': '') + ' btn'}
-                 onClick={this.changeShow.bind(this, 'Completed')}
-                 >Completed</a>
+              <a className={(show === 'Completed' ? 'selected': '') + ' btn'}
+                 onClick={this.changeShow.bind(this, 'Completed')}>
+                Completed
+              </a>
             </li>
           </ul>
           <button className="clear-completed">Clear completed</button>

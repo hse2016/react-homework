@@ -10,7 +10,7 @@ class MainList extends React.Component {
     if (data.length > 0) {
       mainList = data.map(function(item, index) {
         return (
-          <TodoList key={index} data={data}/>
+          <TodoList key={index} data={item}/>
         )
       })
     } else {
