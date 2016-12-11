@@ -14,7 +14,8 @@ export default class Todo extends Component {
             todos: [],
             inputText: "",
             toggledAll: false,
-            itemsLeft: 0
+            itemsLeft: 0,
+            filter: 'all'
         };
 
         this.onTextChange = this.onTextChange.bind(this);
@@ -22,6 +23,7 @@ export default class Todo extends Component {
         this.onToggleTodo = this.onToggleTodo.bind(this);
         this.onDeleteItem = this.onDeleteItem.bind(this);
         this.onToggleAll = this.onToggleAll.bind(this);
+        this.setFilter = this.setFilter.bind(this);
     }
 
     onTextChange(event) {
@@ -83,6 +85,12 @@ export default class Todo extends Component {
         });
     }
 
+    setFilter(filter) {
+        this.setState({
+            filter: filter
+        });
+    }
+
     render() {
         return (
             <section className="todoapp">
@@ -90,7 +98,8 @@ export default class Todo extends Component {
                         onAddTodo={this.onAddTodo} />
                 <TodoList todos={this.state.todos} toggledAll={this.state.toggledAll}
                           onToggleTodo={this.onToggleTodo} onDeleteItem={this.onDeleteItem} onToggleAll={this.onToggleAll}/>
-                <Footer itemsLeft={this.state.itemsLeft} />
+                <Footer itemsLeft={this.state.itemsLeft} filter={this.state.filter}
+                        setFilter={this.setFilter} />
             </section>
         );
     }
