@@ -11,7 +11,7 @@ export default class Todo extends Component {
 
         this.state = {
             todos: [],
-            inputText: ""
+            inputText: "aaa"
         };
 
         this.onTextChange = this.onTextChange.bind(this);
