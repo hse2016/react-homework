@@ -6,7 +6,7 @@ export default class Header extends Component {
         return (
             <div className='Header'>
                 <h1>todos</h1>
-                <LargeInput text={this.props.text}/>
+                <LargeInput text={this.props.inputText} onTextChange={this.props.onTextChange} onAddTodo={this.props.onAddTodo} />
             </div>
         );
     }
