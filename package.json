@@ -27,5 +27,9 @@
   "engines": {
     "node": "7.2.x",
     "nvm": "7.2.x"
+  },
+
+  "scripts": {
+    "start": "node index.js"
   }
 }
