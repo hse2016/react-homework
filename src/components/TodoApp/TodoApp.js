@@ -11,13 +11,15 @@ export default class Todo extends Component {
 
         this.state = {
             todos: [],
-            inputText: ""
+            inputText: "",
+            toggledAll: false
         };
 
         this.onTextChange = this.onTextChange.bind(this);
         this.onAddTodo = this.onAddTodo.bind(this);
         this.onToggleTodo = this.onToggleTodo.bind(this);
         this.onDeleteItem = this.onDeleteItem.bind(this);
+        this.onToggleAll = this.onToggleAll.bind(this);
     }
 
     onTextChange(event) {
@@ -34,7 +36,8 @@ export default class Todo extends Component {
         };
         this.setState((prevState) => ({
             todos: prevState.todos.concat(newTodo),
-            inputText: ""
+            inputText: "",
+            toggledAll: false
         }));
     }
 
@@ -45,26 +48,46 @@ export default class Todo extends Component {
             return todo;
         });
         this.setState({
-            todos: [].concat(updatedItems)
-        });
-        console.log(this.state);
+            todos: [].concat(updatedItems),
+        }, this.checkToggleAll);
     }
 
     onDeleteItem(event, id) {
         var updatedItems = this.state.todos.filter(todo => {
             return todo.id !== id;
         });
-
         this.setState({
-            todos: [].concat(updatedItems)
+            todos: [].concat(updatedItems),
+            toggledAll: this.checkToggleAll()
+        }, this.checkToggleAll);
+    }
+
+    onToggleAll(event) {
+        const updatedItems = this.state.todos.map(todo => {
+            todo.completed = !this.state.toggledAll;
+            return todo;
+        });
+        this.setState({
+            todos: [].concat(updatedItems),
+            toggledAll: !this.state.toggledAll
+        });
+    }
+
+    checkToggleAll() {
+        const val = this.state.todos.length !== 0 &&
+            this.state.todos.filter(todo => { return todo.completed !== true; }).length === 0;
+        this.setState({
+            toggledAll: val
         });
     }
 
     render() {
         return (
             <section className="todoapp">
-                <Header inputText={this.state.inputText} onTextChange={this.onTextChange} onAddTodo={this.onAddTodo}/>
-                <TodoList todos={this.state.todos} onToggleTodo={this.onToggleTodo} onDeleteItem={this.onDeleteItem}/>
+                <Header inputText={this.state.inputText} onTextChange={this.onTextChange}
+                        onAddTodo={this.onAddTodo} />
+                <TodoList todos={this.state.todos} toggledAll={this.state.toggledAll}
+                          onToggleTodo={this.onToggleTodo} onDeleteItem={this.onDeleteItem} onToggleAll={this.onToggleAll}/>
             </section>
         );
     }

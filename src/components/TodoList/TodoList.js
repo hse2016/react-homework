@@ -7,7 +7,7 @@ export default class TodoList extends Component {
         return (
             <section className="main">
 
-                <input className="toggle-all" type="checkbox" />
+                <input className="toggle-all" type="checkbox" checked={this.props.toggledAll} onClick={this.props.onToggleAll}/>
 
                 <div className="todo-list">
                     {this.props.todos.map(item => (
