@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Header from './../Header/Header'
 import TodoList from './../TodoList/TodoList'
+import guid from './../../utils/GUID';
 require("./TodoApp.css");
 
 export default class Todo extends Component {
@@ -9,7 +10,7 @@ export default class Todo extends Component {
         super(props);
 
         this.state = {
-            todos: [{title : 'Artem'}],
+            todos: [],
             inputText: ""
         };
 
@@ -20,29 +21,39 @@ export default class Todo extends Component {
 
     onTextChange(event) {
         this.setState({
-            text: event.target.value,
-            completed: false
+            inputText: event.target.value
         });
     }
 
     onAddTodo(event) {
-        const newTodo = {'title' : event.target.value};
-        console.log(newTodo);
+        const newTodo = {
+            title: event.target.value,
+            completed: false,
+            id : guid()
+        };
         this.setState((prevState) => ({
             todos: prevState.todos.concat(newTodo),
             inputText: ""
         }));
     }
 
-    toggleTodo(id) {
-        console.log(id);
+    toggleTodo(event, id) {
+        var updatedItems = this.state.todos.map(item => {
+            if (id === item.id)
+                item.completed = event.target.checked;
+            return item;
+        });
+        this.setState({
+            todos: [].concat(updatedItems)
+        });
+        console.log(this.state);
     }
 
     render() {
         return (
             <section className="todoapp">
                 <Header inputText={this.state.inputText} onTextChange={this.onTextChange} onAddTodo={this.onAddTodo}/>
-                <TodoList todos={this.state.todos} toggleTodo={this.toggleTodo} />
+                <TodoList todos={this.state.todos} toggleTodo={this.toggleTodo}/>
             </section>
         );
     }
