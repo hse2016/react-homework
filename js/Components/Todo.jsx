@@ -36,7 +36,7 @@ class Todo extends React.Component {
     let completed = data.completed;
 
     return (
-      <li className={editing ? "editing" : ""}>
+      <li className={(editing ? "editing" : "") + (completed ? " completed" : "")}>
         <div className="view">
           <input className="toggle"
                  type="checkbox"

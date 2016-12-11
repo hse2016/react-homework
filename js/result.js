@@ -23518,7 +23518,7 @@ var result =
 	
 	      return React.createElement(
 	        'li',
-	        { className: editing ? "editing" : "" },
+	        { className: (editing ? "editing" : "") + (completed ? " completed" : "") },
 	        React.createElement(
 	          'div',
 	          { className: 'view' },
