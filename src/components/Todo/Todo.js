@@ -4,7 +4,11 @@ require("./Todo.css");
 export default class Todo extends Component {
 
     toggleTodo(e) {
-        this.props.toggleTodo(e, this.props.id);
+        this.props.onToggleTodo(e, this.props.id);
+    }
+
+    deleteTodo(e) {
+        this.props.onDeleteItem(e, this.props.id);
     }
 
     render() {
@@ -13,7 +17,7 @@ export default class Todo extends Component {
                 <div className="view">
                     <input className="toggle" type="checkbox" onChange={this.toggleTodo.bind(this)}/>
                     <label>{this.props.title}</label>
-                    <button className="destroy"></button>
+                    <button className="destroy" onClick={this.deleteTodo.bind(this)}></button>
                 </div>
             </li>
         );

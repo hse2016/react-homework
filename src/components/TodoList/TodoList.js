@@ -11,7 +11,8 @@ export default class TodoList extends Component {
 
                 <div className="todo-list">
                     {this.props.todos.map(item => (
-                        <Todo title={item.title} id={item.id} key={item.id} completed={item.completed} toggleTodo={this.props.toggleTodo} />
+                        <Todo title={item.title} id={item.id} key={item.id} completed={item.completed}
+                              onDeleteItem={this.props.onDeleteItem} onToggleTodo={this.props.onToggleTodo} />
                     ))}
                 </div>
 

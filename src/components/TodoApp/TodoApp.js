@@ -11,12 +11,13 @@ export default class Todo extends Component {
 
         this.state = {
             todos: [],
-            inputText: "aaa"
+            inputText: ""
         };
 
         this.onTextChange = this.onTextChange.bind(this);
         this.onAddTodo = this.onAddTodo.bind(this);
-        this.toggleTodo = this.toggleTodo.bind(this);
+        this.onToggleTodo = this.onToggleTodo.bind(this);
+        this.onDeleteItem = this.onDeleteItem.bind(this);
     }
 
     onTextChange(event) {
@@ -37,11 +38,11 @@ export default class Todo extends Component {
         }));
     }
 
-    toggleTodo(event, id) {
-        var updatedItems = this.state.todos.map(item => {
-            if (id === item.id)
-                item.completed = event.target.checked;
-            return item;
+    onToggleTodo(event, id) {
+        const updatedItems = this.state.todos.map(todo => {
+            if (id === todo.id)
+                todo.completed = event.target.checked;
+            return todo;
         });
         this.setState({
             todos: [].concat(updatedItems)
@@ -49,11 +50,21 @@ export default class Todo extends Component {
         console.log(this.state);
     }
 
+    onDeleteItem(event, id) {
+        var updatedItems = this.state.todos.filter(todo => {
+            return todo.id !== id;
+        });
+
+        this.setState({
+            todos: [].concat(updatedItems)
+        });
+    }
+
     render() {
         return (
             <section className="todoapp">
                 <Header inputText={this.state.inputText} onTextChange={this.onTextChange} onAddTodo={this.onAddTodo}/>
-                <TodoList todos={this.state.todos} toggleTodo={this.toggleTodo}/>
+                <TodoList todos={this.state.todos} onToggleTodo={this.onToggleTodo} onDeleteItem={this.onDeleteItem}/>
             </section>
         );
     }
