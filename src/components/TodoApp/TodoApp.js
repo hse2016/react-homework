@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Header from './../Header/Header'
 import TodoList from './../TodoList/TodoList'
+import Footer from './../Footer/Footer'
 import guid from './../../utils/GUID';
 require("./TodoApp.css");
 
@@ -12,7 +13,8 @@ export default class Todo extends Component {
         this.state = {
             todos: [],
             inputText: "",
-            toggledAll: false
+            toggledAll: false,
+            itemsLeft: 0
         };
 
         this.onTextChange = this.onTextChange.bind(this);
@@ -38,7 +40,7 @@ export default class Todo extends Component {
             todos: prevState.todos.concat(newTodo),
             inputText: "",
             toggledAll: false
-        }));
+        }), this.checkToggles);
     }
 
     onToggleTodo(event, id) {
@@ -49,7 +51,7 @@ export default class Todo extends Component {
         });
         this.setState({
             todos: [].concat(updatedItems),
-        }, this.checkToggleAll);
+        }, this.checkToggles);
     }
 
     onDeleteItem(event, id) {
@@ -59,7 +61,7 @@ export default class Todo extends Component {
         this.setState({
             todos: [].concat(updatedItems),
             toggledAll: this.checkToggleAll()
-        }, this.checkToggleAll);
+        }, this.checkToggles);
     }
 
     onToggleAll(event) {
@@ -70,14 +72,14 @@ export default class Todo extends Component {
         this.setState({
             todos: [].concat(updatedItems),
             toggledAll: !this.state.toggledAll
-        });
+        }, this.checkToggles);
     }
 
-    checkToggleAll() {
-        const val = this.state.todos.length !== 0 &&
-            this.state.todos.filter(todo => { return todo.completed !== true; }).length === 0;
+    checkToggles() {
+        const itemsLeft = this.state.todos.filter(todo => { return todo.completed !== true; }).length;
         this.setState({
-            toggledAll: val
+            toggledAll: this.state.todos.length !== 0 && itemsLeft === 0,
+            itemsLeft: itemsLeft
         });
     }
 
@@ -88,6 +90,7 @@ export default class Todo extends Component {
                         onAddTodo={this.onAddTodo} />
                 <TodoList todos={this.state.todos} toggledAll={this.state.toggledAll}
                           onToggleTodo={this.onToggleTodo} onDeleteItem={this.onDeleteItem} onToggleAll={this.onToggleAll}/>
+                <Footer itemsLeft={this.state.itemsLeft} />
             </section>
         );
     }
