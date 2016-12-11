@@ -10,7 +10,6 @@ export default class Todo extends Component {
     constructor(props) {
         super(props);
 
-
         const loadState = JSON.parse(localStorage.getItem('todos'));
         this.state = loadState || {
                 todos: [],
@@ -20,7 +19,6 @@ export default class Todo extends Component {
                 filter: 'all'
             };
 
-
         this.onTextChange = this.onTextChange.bind(this);
         this.onAddTodo = this.onAddTodo.bind(this);
         this.onToggleTodo = this.onToggleTodo.bind(this);
@@ -28,6 +26,8 @@ export default class Todo extends Component {
         this.onToggleAll = this.onToggleAll.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.clearCompleted = this.clearCompleted.bind(this);
+        this.editTodo = this.editTodo.bind(this);
+        this.saveTodo = this.saveTodo.bind(this);
     }
 
     onTextChange(event) {
@@ -40,7 +40,8 @@ export default class Todo extends Component {
         const newTodo = {
             title: event.target.value,
             completed: false,
-            id: guid()
+            id: guid(),
+            editable: false
         };
         this.setState((prevState) => ({
             todos: prevState.todos.concat(newTodo),
@@ -123,6 +124,32 @@ export default class Todo extends Component {
         localStorage.setItem('todos', JSON.stringify(this.state));
     }
 
+    editTodo(event, id) {
+        const updatedItems = this.state.todos.map(todo => {
+            if (id === todo.id)
+                todo.editable = true;
+            else
+                todo.editable = false;
+            return todo;
+        });
+        this.setState({
+            todos: [].concat(updatedItems),
+        }, this.checkToggles);
+    }
+
+    saveTodo(event, id, text) {
+        const updatedItems = this.state.todos.map(todo => {
+            if (id === todo.id) {
+                todo.title = text;
+                todo.editable = false;
+            }
+            return todo;
+        });
+        this.setState({
+            todos: [].concat(updatedItems),
+        }, this.checkToggles);
+    }
+
     render() {
         return (
             <section className="todoapp">
@@ -134,7 +161,10 @@ export default class Todo extends Component {
                           toggledAll={this.state.toggledAll}
                           onToggleTodo={this.onToggleTodo}
                           onDeleteItem={this.onDeleteItem}
-                          onToggleAll={this.onToggleAll}/>
+                          onToggleAll={this.onToggleAll}
+                          editTodo={this.editTodo}
+                          saveTodo={this.saveTodo}
+                            />
 
                 <Footer itemsLeft={this.state.itemsLeft}
                         filter={this.state.filter}
