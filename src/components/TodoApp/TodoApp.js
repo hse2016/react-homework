@@ -91,14 +91,32 @@ export default class Todo extends Component {
         });
     }
 
+    filterTodos() {
+        switch(this.state.filter) {
+            case 'all':
+                return this.state.todos;
+            case 'active':
+                return this.state.todos.filter(todo => { return todo.completed !== true});
+            case 'completed':
+                return this.state.todos.filter(todo => { return todo.completed === true});
+        }
+    }
+
     render() {
         return (
             <section className="todoapp">
-                <Header inputText={this.state.inputText} onTextChange={this.onTextChange}
+                <Header inputText={this.state.inputText}
+                        onTextChange={this.onTextChange}
                         onAddTodo={this.onAddTodo} />
-                <TodoList todos={this.state.todos} toggledAll={this.state.toggledAll}
-                          onToggleTodo={this.onToggleTodo} onDeleteItem={this.onDeleteItem} onToggleAll={this.onToggleAll}/>
-                <Footer itemsLeft={this.state.itemsLeft} filter={this.state.filter}
+
+                <TodoList todos={this.filterTodos()}
+                          toggledAll={this.state.toggledAll}
+                          onToggleTodo={this.onToggleTodo}
+                          onDeleteItem={this.onDeleteItem}
+                          onToggleAll={this.onToggleAll}/>
+
+                <Footer itemsLeft={this.state.itemsLeft}
+                        filter={this.state.filter}
                         setFilter={this.setFilter} />
             </section>
         );
