@@ -10,13 +10,16 @@ export default class Todo extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            todos: [],
-            inputText: "",
-            toggledAll: false,
-            itemsLeft: 0,
-            filter: 'all'
-        };
+
+        const loadState = JSON.parse(localStorage.getItem('todos'));
+        this.state = loadState || {
+                todos: [],
+                inputText: "",
+                toggledAll: false,
+                itemsLeft: 0,
+                filter: 'all'
+            };
+
 
         this.onTextChange = this.onTextChange.bind(this);
         this.onAddTodo = this.onAddTodo.bind(this);
@@ -30,14 +33,14 @@ export default class Todo extends Component {
     onTextChange(event) {
         this.setState({
             inputText: event.target.value
-        });
+        }, this.saveState);
     }
 
     onAddTodo(event) {
         const newTodo = {
             title: event.target.value,
             completed: false,
-            id : guid()
+            id: guid()
         };
         this.setState((prevState) => ({
             todos: prevState.todos.concat(newTodo),
@@ -77,27 +80,33 @@ export default class Todo extends Component {
     }
 
     checkToggles() {
-        const itemsLeft = this.state.todos.filter(todo => { return todo.completed !== true; }).length;
+        const itemsLeft = this.state.todos.filter(todo => {
+            return todo.completed !== true;
+        }).length;
         this.setState({
             toggledAll: this.state.todos.length !== 0 && itemsLeft === 0,
             itemsLeft: itemsLeft
-        });
+        }, this.saveState);
     }
 
     setFilter(filter) {
         this.setState({
             filter: filter
-        });
+        }, this.saveState);
     }
 
     filterTodos() {
-        switch(this.state.filter) {
+        switch (this.state.filter) {
             case 'all':
                 return this.state.todos;
             case 'active':
-                return this.state.todos.filter(todo => { return todo.completed !== true});
+                return this.state.todos.filter(todo => {
+                    return todo.completed !== true
+                });
             case 'completed':
-                return this.state.todos.filter(todo => { return todo.completed === true});
+                return this.state.todos.filter(todo => {
+                    return todo.completed === true
+                });
         }
     }
 
@@ -110,12 +119,16 @@ export default class Todo extends Component {
         }, this.checkToggles);
     }
 
+    saveState() {
+        localStorage.setItem('todos', JSON.stringify(this.state));
+    }
+
     render() {
         return (
             <section className="todoapp">
                 <Header inputText={this.state.inputText}
                         onTextChange={this.onTextChange}
-                        onAddTodo={this.onAddTodo} />
+                        onAddTodo={this.onAddTodo}/>
 
                 <TodoList todos={this.filterTodos()}
                           toggledAll={this.state.toggledAll}
