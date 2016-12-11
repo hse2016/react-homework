@@ -60,10 +60,8 @@ var result =
 	
 	  // create models
 	  var mainList = [{
-	    state: "All",
-	    todos: []
+	    todos: [{ title: 'asdf' }]
 	  }, {
-	    state: "Show",
 	    todos: []
 	  }];
 	
@@ -21718,16 +21716,28 @@ var result =
 	var TodoList = function (_React$Component) {
 	  (0, _inherits3.default)(TodoList, _React$Component);
 	
-	  function TodoList() {
+	  function TodoList(props) {
 	    (0, _classCallCheck3.default)(this, TodoList);
-	    return (0, _possibleConstructorReturn3.default)(this, (TodoList.__proto__ || (0, _getPrototypeOf2.default)(TodoList)).apply(this, arguments));
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, (TodoList.__proto__ || (0, _getPrototypeOf2.default)(TodoList)).call(this, props));
+	
+	    _this.state = {
+	      show: 'All'
+	    };
+	    return _this;
 	  }
 	
 	  (0, _createClass3.default)(TodoList, [{
+	    key: "changeShow",
+	    value: function changeShow(show, e) {
+	      e.preventDefault();
+	      this.setState({ show: show });
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      var data = this.props.data,
-	          show = data.show;
+	          show = this.state.show;
 	      return React.createElement(
 	        "div",
 	        { className: "todoapp todolist" },
@@ -21777,7 +21787,10 @@ var result =
 	              null,
 	              React.createElement(
 	                "a",
-	                { className: show === 'All' ? '"selected"' : '', href: "#/" },
+	                {
+	                  className: (show === 'All' ? 'selected' : '') + ' btn',
+	                  onClick: this.changeShow.bind(this, 'All')
+	                },
 	                "All"
 	              )
 	            ),
@@ -21786,7 +21799,10 @@ var result =
 	              null,
 	              React.createElement(
 	                "a",
-	                { className: show === 'Active' ? '"selected"' : '', href: "#/active" },
+	                {
+	                  className: (show === 'Active' ? 'selected' : '') + ' btn',
+	                  onClick: this.changeShow.bind(this, 'Active')
+	                },
 	                "Active"
 	              )
 	            ),
@@ -21795,7 +21811,10 @@ var result =
 	              null,
 	              React.createElement(
 	                "a",
-	                { className: show === 'Completed' ? '"selected"' : '', href: "#/completed" },
+	                {
+	                  className: (show === 'Completed' ? 'selected' : '') + ' btn',
+	                  onClick: this.changeShow.bind(this, 'Completed')
+	                },
 	                "Completed"
 	              )
 	            )

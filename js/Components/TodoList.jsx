@@ -1,9 +1,21 @@
 let React = require("react");
 
 class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: 'All',
+    };
+  }
+
+  changeShow(show, e) {
+    e.preventDefault();
+    this.setState({show: show});
+  }
+
   render() {
     let data = this.props.data,
-        show = data.show;
+        show = this.state.show;
     return (
       <div className="todoapp todolist">
         <header className="header">
@@ -21,13 +33,22 @@ class TodoList extends React.Component {
           <span className="todo-count"><strong>0</strong> item left</span>
           <ul className="filters">
             <li>
-              <a className={show === 'All' ? '"selected"': ''} href="#/">All</a>
+              <a
+                 className={(show === 'All' ? 'selected': '') + ' btn'}
+                 onClick={this.changeShow.bind(this, 'All')}
+                 >All</a>
             </li>
             <li>
-              <a className={show === 'Active' ? '"selected"': ''} href="#/active">Active</a>
+              <a
+                 className={(show === 'Active' ? 'selected': '') + ' btn'}
+                 onClick={this.changeShow.bind(this, 'Active')}
+                 >Active</a>
             </li>
             <li>
-              <a className={show === 'Completed' ? '"selected"': ''} href="#/completed">Completed</a>
+              <a
+                 className={(show === 'Completed' ? 'selected': '') + ' btn'}
+                 onClick={this.changeShow.bind(this, 'Completed')}
+                 >Completed</a>
             </li>
           </ul>
           <button className="clear-completed">Clear completed</button>

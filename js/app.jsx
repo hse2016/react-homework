@@ -12,10 +12,8 @@ let MainList = components.MainList;
   // create models
   let mainList = [
     {
-      state: "All",
-      todos: []
+      todos: [{title: 'asdf'}]
     }, {
-      state: "Show",
       todos: []
     },
   ];
