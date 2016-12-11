@@ -4,6 +4,7 @@
   "description": "Реализовать todomvc из прошлого домашнего задания на чистом React",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.14.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "todomvc-app-css": "^2.0.6",

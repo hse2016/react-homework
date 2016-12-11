@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Menu from '../components/Header/Menu.jsx.js';
+import TodoApp from '../components/TodoApp/TodoApp';
 
 ReactDOM.render(
-    <Header />,
+    <TodoApp />,
     document.getElementById('app')
 );
