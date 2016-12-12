@@ -21696,7 +21696,7 @@ var result =
 	          React.createElement(
 	            "button",
 	            {
-	              className: "destroy-todolist",
+	              className: "destroy-todolist" + " btn",
 	              onClick: this.props.handlers.removeTodoList },
 	            "X"
 	          )
@@ -23306,6 +23306,13 @@ var result =
 	  }
 	
 	  (0, _createClass3.default)(Todo, [{
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps) {
+	      if (this.state.editing) {
+	        this.refs.editField.focus();
+	      }
+	    }
+	  }, {
 	    key: 'toggleCompleted',
 	    value: function toggleCompleted() {
 	      var data = this.props.data;
@@ -23358,6 +23365,7 @@ var result =
 	            onClick: this.props.handlers.removeTodo })
 	        ),
 	        React.createElement('input', {
+	          ref: 'editField',
 	          className: 'edit',
 	          defaultValue: data.title,
 	          onKeyPress: this.finishEdit.bind(this),
@@ -23448,9 +23456,13 @@ var result =
 	        });
 	      } else {
 	        mainList = React.createElement(
-	          'p',
+	          'center',
 	          null,
-	          'No todo lists'
+	          React.createElement(
+	            'p',
+	            null,
+	            'You don\'t have todo lists'
+	          )
 	        );
 	      }
 	
@@ -23468,7 +23480,7 @@ var result =
 	          React.createElement(
 	            'button',
 	            {
-	              className: 'add',
+	              className: "add" + " btn",
 	              onClick: this.addTodoList.bind(this) },
 	            '+'
 	          )

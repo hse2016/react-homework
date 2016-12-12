@@ -135,7 +135,7 @@ class TodoList extends React.Component {
              placeholder="What needs to be done?"
              onKeyPress={this.addTodo.bind(this)}/>
           <button
-             className="destroy-todolist"
+             className={"destroy-todolist" + " btn"}
              onClick={this.props.handlers.removeTodoList}>
             X
           </button>

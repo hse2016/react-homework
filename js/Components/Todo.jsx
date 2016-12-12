@@ -9,6 +9,11 @@ class Todo extends React.Component {
       editing: false
     };
   }
+  componentDidUpdate(prevProps) {
+    if (this.state.editing) {
+      this.refs.editField.focus();
+    }
+  }
 
   toggleCompleted() {
     let data = this.props.data;
@@ -54,6 +59,7 @@ class Todo extends React.Component {
           </button>
         </div>
         <input
+           ref="editField"
            className="edit"
            defaultValue={data.title}
            onKeyPress={this.finishEdit.bind(this)}

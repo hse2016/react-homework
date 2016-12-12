@@ -36,7 +36,7 @@ class MainList extends React.Component {
         );
       });
     } else {
-      mainList = <p>No todo lists</p>;
+      mainList = <center><p>You don't have todo lists</p></center>;
     }
 
     return (
@@ -46,7 +46,7 @@ class MainList extends React.Component {
         </div>
         <center>
           <button
-             className="add"
+             className={"add" + " btn"}
              onClick={this.addTodoList.bind(this)}>
             +
           </button>
