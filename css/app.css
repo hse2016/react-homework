@@ -35,3 +35,7 @@
 .btn:hover {
   box-shadow: 0 0 7px rgba(0,0,0,0.2);
 }
+
+.todo-title {
+  margin: 130px 0 40px 0;
+}
