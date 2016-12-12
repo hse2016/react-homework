@@ -1,4 +1,5 @@
 let React = require("react");
+let state = require('State');
 
 class Todo extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class Todo extends React.Component {
     data.completed = !data.completed;
     this.setState({data: data});
     this.props.handlers.calculateTodos();
+    state.save();
   }
 
   startEdit() {
@@ -27,6 +29,7 @@ class Todo extends React.Component {
     let data = this.props.data;
     data.title = title;
     this.setState({editing: false, data: data});
+    state.save();
   }
 
   render() {

@@ -1,4 +1,6 @@
 let React = require("react");
+let state = require('State');
+
 let Todo = require("./Todo").Todo;
 
 class TodoList extends React.Component {
@@ -16,6 +18,7 @@ class TodoList extends React.Component {
     this.props.data.todos.push({title: title, completed: false});
     this.setState({data: this.props.data});
     event.target.value = "";
+    state.save();
   }
 
   removeTodo(key) {
@@ -23,6 +26,7 @@ class TodoList extends React.Component {
     this.setState({
       data: this.props.data
     });
+    state.save();
   }
 
 
@@ -37,7 +41,9 @@ class TodoList extends React.Component {
     this.props.data.todos = active;
 
     this.setState({
-      data: this.props.data});
+      data: this.props.data
+    });
+    state.save();
   }
 
   changeShow(show, e) {

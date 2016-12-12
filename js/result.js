@@ -51,6 +51,7 @@ var result =
 	var ReactDOM = __webpack_require__(32);
 	var components = __webpack_require__(178);
 	var MainList = components.MainList;
+	var state = __webpack_require__(268);
 	
 	(function () {
 	  "use strict";
@@ -59,7 +60,14 @@ var result =
 	  var root = document.querySelector('.mainlist');
 	
 	  // create models
-	  var mainList = [{ todos: [] }];
+	  var mainList = state.get();
+	  if (!mainList) {
+	    mainList = [{ todos: [] }];
+	    state.set(mainList);
+	    state.save();
+	  } else {
+	    state.set(mainList);
+	  }
 	
 	  ReactDOM.render(React.createElement(MainList, { data: mainList }), root);
 	})();
@@ -21515,6 +21523,8 @@ var result =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var React = __webpack_require__(1);
+	var state = __webpack_require__(268);
+	
 	var Todo = __webpack_require__(266).Todo;
 	
 	var TodoList = function (_React$Component) {
@@ -21540,6 +21550,7 @@ var result =
 	      this.props.data.todos.push({ title: title, completed: false });
 	      this.setState({ data: this.props.data });
 	      event.target.value = "";
+	      state.save();
 	    }
 	  }, {
 	    key: "removeTodo",
@@ -21548,6 +21559,7 @@ var result =
 	      this.setState({
 	        data: this.props.data
 	      });
+	      state.save();
 	    }
 	  }, {
 	    key: "clearCompleted",
@@ -21561,7 +21573,9 @@ var result =
 	      this.props.data.todos = active;
 	
 	      this.setState({
-	        data: this.props.data });
+	        data: this.props.data
+	      });
+	      state.save();
 	    }
 	  }, {
 	    key: "changeShow",
@@ -23275,6 +23289,7 @@ var result =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var React = __webpack_require__(1);
+	var state = __webpack_require__(268);
 	
 	var Todo = function (_React$Component) {
 	  (0, _inherits3.default)(Todo, _React$Component);
@@ -23297,6 +23312,7 @@ var result =
 	      data.completed = !data.completed;
 	      this.setState({ data: data });
 	      this.props.handlers.calculateTodos();
+	      state.save();
 	    }
 	  }, {
 	    key: 'startEdit',
@@ -23312,6 +23328,7 @@ var result =
 	      var data = this.props.data;
 	      data.title = title;
 	      this.setState({ editing: false, data: data });
+	      state.save();
 	    }
 	  }, {
 	    key: 'render',
@@ -23382,6 +23399,7 @@ var result =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var React = __webpack_require__(1);
+	var state = __webpack_require__(268);
 	
 	var components = __webpack_require__(178);
 	var TodoList = __webpack_require__(179).TodoList;
@@ -23399,6 +23417,7 @@ var result =
 	    value: function addTodoList() {
 	      this.props.data.push({ todos: [], completed: false });
 	      this.setState({ data: this.props.data });
+	      state.save();
 	    }
 	  }, {
 	    key: 'removeTodoList',
@@ -23407,6 +23426,7 @@ var result =
 	      this.setState({
 	        data: this.props.data
 	      });
+	      state.save();
 	    }
 	  }, {
 	    key: 'render',
@@ -23462,6 +23482,54 @@ var result =
 	module.exports = {
 	  MainList: MainList
 	};
+
+/***/ },
+/* 268 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	let stateObject;
+	
+	
+	/**
+	 * Load state from local Storage
+	 */
+	function get() {
+	  let state = window.localStorage.getItem("#State");
+	  try {
+	    state = JSON.parse(state);
+	  } catch (error) {
+	    return undefined;
+	  }
+	
+	  return state;
+	};
+	
+	
+	/**
+	 * Set state object as application main object
+	 * Then this object could be by State.save function.
+	 */
+	function set(state) {
+	  stateObject = state;
+	};
+	
+	
+	function save() {
+	  if (!stateObject) {
+	    throw new Error('ValueError: default state is undefined.');
+	  }
+	  window.localStorage["#State"] = JSON.stringify(stateObject);
+	}
+	
+	
+	module.exports = {
+	  get: get,
+	  set: set,
+	  save: save
+	};
+
 
 /***/ }
 /******/ ]);
