@@ -21638,7 +21638,9 @@ var result =
 	            null,
 	            todosNumber - completedNumber
 	          ),
-	          " item left"
+	          " item",
+	          todosNumber - completedNumber > 1 ? "s" : "",
+	          " left"
 	        ),
 	        React.createElement(
 	          "ul",

@@ -98,7 +98,8 @@ class TodoList extends React.Component {
     let footer = (
       <footer className="footer">
         <span className="todo-count">
-          <strong>{todosNumber - completedNumber}</strong> item left
+          <strong>{todosNumber - completedNumber}</strong> item
+          {( todosNumber - completedNumber ) > 1 ? "s" : ""} left
         </span>
         <ul className="filters">
           <li>
